@@ -15,14 +15,16 @@ AR          := ar rcs
 # Commandes pour nettoyer
 RM          := rm -f
 
-
+# libft
+LIBFT_DIR   := libft
+LIBFT       := $(LIBFT_DIR)/libft.a
 
 # **************************************************************************** #
 #                                 SOURCES                                      #
 # **************************************************************************** #
 
 # Liste des fichiers sources (sans les bonus)
-SRCS        :=
+SRCS        := ft_printf.c
 
 # Liste des fichiers sources pour les bonus
 SRCS_BONUS  :=
@@ -39,21 +41,27 @@ OBJS_BONUS  := $(SRCS_BONUS:.c=.o)
 all: $(NAME)
 
 # Compilation de la librairie
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT)
 	@echo " "
 	@echo ">>>>> Création de $(NAME) ... <<<<<"
 	@echo " "
 	$(AR) $(NAME) $(OBJS)
+	$(AR) $(NAME) $(LIBFT)
 	@echo " "
 	@echo ">>>>> $(NAME) créé avec succès. <<<<<"
 	@echo " "
 
+# Compilation de libft
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
+
 # Compilation des fichiers bonus
-bonus: $(OBJS) $(OBJS_BONUS)
+bonus: $(OBJS) $(OBJS_BONUS) $(LIBFT)
 	@echo " "
 	@echo ">>>>> Ajout des bonus à $(NAME)... <<<<<"
 	@echo " "
 	$(AR) $(NAME) $(OBJS) $(OBJS_BONUS)
+	$(AR) $(NAME) $(LIBFT)
 	@echo " "
 	@echo ">>>>> Bonus ajoutés avec succès. <<<<<"
 	@echo " "
@@ -61,8 +69,7 @@ bonus: $(OBJS) $(OBJS_BONUS)
 # Compilation des fichiers objets
 %.o: %.c
 	@echo ">>>>> Compilation de $< ... <<<<<"
-	$(CC) $(CFLAGS) -c $< -o $@
-
+	$(CC) $(CFLAGS) -c $< -o $@ -I.
 
 # **************************************************************************** #
 #                                 NETTOYAGE                                    #
@@ -74,6 +81,7 @@ clean:
 	@echo ">>>>> Nettoyage des fichiers objets... <<<<<"
 	@echo " "
 	$(RM) $(OBJS) $(OBJS_BONUS)
+	$(MAKE) -C $(LIBFT_DIR) clean
 	@echo " "
 	@echo ">>>>> Nettoyage terminé. <<<<<"
 	@echo " "
@@ -84,6 +92,7 @@ fclean: clean
 	@echo ">>>>> Suppression de $(NAME)... <<<<<"
 	@echo " "
 	$(RM) $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
 	@echo " "
 	@echo ">>>>> Suppression terminée. <<<<<"
 	@echo " "
