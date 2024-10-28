@@ -6,11 +6,125 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:45:00 by edetoh            #+#    #+#             */
-/*   Updated: 2024/10/28 14:22:39 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/10/28 17:38:43 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+
+char	*ft_strdup(const char *s)
+{
+	char	*strduped;
+	int		i;
+	int		length;
+
+	length = 0;
+	while (s[length] != '\0')
+	{
+		length++;
+	}
+	strduped = malloc((length + 1) * sizeof(char));
+	if (!strduped)
+		return (NULL);
+	i = 0;
+	while (i < length)
+	{
+		strduped[i] = s[i];
+		i++;
+	}
+	strduped[i] = '\0';
+	return (strduped);
+}
+
+static int	ft_int_len(int n)
+{
+	int	len;
+
+	len = 0;
+	if (n <= 0)
+	{
+		len++;
+	}
+	while (n != 0)
+	{
+		n = n / 10;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*str;
+	int		int_len;
+	int		nb;
+
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	int_len = ft_int_len(n);
+	str = malloc((int_len + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	nb = n;
+	str[int_len] = 0;
+	if (n < 0)
+	{
+		str[0] = '-';
+		nb = -nb;
+	}
+	if (nb == 0)
+		str[0] = '0';
+	while (nb > 0)
+	{
+		str[--int_len] = (nb % 10) + '0';
+		nb = nb / 10;
+	}
+	return (str);
+}
+
+static int	ft_unsigned_int_len(unsigned int n)
+{
+	int	len;
+
+	len = 0;
+	if (n <= 0)
+	{
+		len++;
+	}
+	while (n != 0)
+	{
+		n = n / 10;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_unsigned_itoa(unsigned int n)
+{
+	char				*str;
+	int					int_len;
+	unsigned int		nb;
+
+	int_len = ft_unsigned_int_len(n);
+	str = malloc((int_len + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	nb = n;
+	str[int_len] = 0;
+	if (n < 0)
+	{
+		str[0] = '-';
+		nb = -nb;
+	}
+	if (nb == 0)
+		str[0] = '0';
+	while (nb > 0)
+	{
+		str[--int_len] = (nb % 10) + '0';
+		nb = nb / 10;
+	}
+	return (str);
+}
 
 size_t	ft_strlen(const char *s)
 {
@@ -65,6 +179,64 @@ int	ft_putadress(void *ptr)
 	return (2 + 16 - start);
 }
 
+int	ft_puthexlow(unsigned int num)
+{
+	char		*hex_digits;
+	char		hex[8];
+	int			i;
+	int			count;
+
+	hex_digits = "0123456789abcdef";
+	i = 7;
+	while (i >= 0)
+	{
+		hex[i] = hex_digits[num % 16];
+		num /= 16;
+		i--;
+	}
+	count = 0;
+	i = 0;
+	while (i < 8 && hex[i] == '0')
+		i++;
+	if (i == 8)
+		i = 7;
+	while (i < 8)
+	{
+		count += ft_putchar(hex[i]);
+		i++;
+	}
+	return (count);
+}
+
+int	ft_puthexupp(unsigned int num)
+{
+	char		*hex_digits;
+	char		hex[8];
+	int			i;
+	int			count;
+
+	hex_digits = "0123456789ABCDEF";
+	i = 7;
+	while (i >= 0)
+	{
+		hex[i] = hex_digits[num % 16];
+		num /= 16;
+		i--;
+	}
+	count = 0;
+	i = 0;
+	while (i < 8 && hex[i] == '0')
+		i++;
+	if (i == 8)
+		i = 7;
+	while (i < 8)
+	{
+		count += ft_putchar(hex[i]);
+		i++;
+	}
+	return (count);
+}
+
 static int	print_format(char format, va_list *ap)
 {
 	int			count;
@@ -72,18 +244,18 @@ static int	print_format(char format, va_list *ap)
 	count = 0;
 	if (format == 'c')
 		count += ft_putchar(va_arg(*ap, int));
-	if (format == 's')
+	else if (format == 's')
 		count += ft_putstr(va_arg(*ap, char *));
-	if (format == 'p')
+	else if (format == 'p')
 		count += ft_putadress(va_arg(*ap, char *));
-	// if (format == 'i')
-	// 	count += ft_putint(va_arg(ap, char *));
-	// if (format == 'x')
-	// 	count += ft_putint(va_arg(ap, char *));
-	// if (format == 'X')
-	// 	count += ft_putint(va_arg(ap, char *));
-	// if (format == '%')
-	// 	count += ft_putint(va_arg(ap, char *));
+	else if (format == 'd' || format == 'i')
+		count += ft_putstr(ft_itoa(va_arg(*ap, int)));
+	else if (format == 'u')
+		count += ft_putstr(ft_unsigned_itoa(va_arg(*ap, unsigned int)));
+	else if (format == 'x')
+		count += ft_puthexlow(va_arg(*ap, unsigned int));
+	else if (format == 'X')
+		count += ft_puthexupp(va_arg(*ap, unsigned int));
 	else
 		write(1, &format, 1);
 	return (count);
@@ -114,16 +286,18 @@ int	ft_printf(const char *str, ...)
 	return (count);
 }
 
-int	main(void)
+int main(void)
 {
-	int resp;
 	int resv;
+	int resp;
+	int *pointeur = &resv;
 
-	int *pointeur = &resp;
+	resv = ft_printf("=== MON PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\nDecimal : %d\nInteger : %i\nUnsigned decimal : %u\nHexadecimal (lowercase) : %x\nHexadecimal (uppercase) : %X\nPercent sign : %%\n",
+					 'Z', "Bonjour", (void *)pointeur, 123, 21, 233323323, 166, 166);
+	resp =    printf("=== VRA PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\nDecimal : %d\nInteger : %i\nUnsigned decimal : %u\nHexadecimal (lowercase) : %x\nHexadecimal (uppercase) : %X\nPercent sign : %%\n",
+					 'Z', "Bonjour", (void *)pointeur, 123, 21, 233323323, 166, 166);
 
-	resv = ft_printf("=== MON PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\n", 'Z', "Bonjour", (void *)pointeur);
-	resp = printf("=== VRA PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\n", 'Z', "Bonjour", (void *)pointeur);
+	printf("=== Résultats ===\nMon printf a imprimé %d caractères\nVrai printf a imprimé %d caractères\n", resv, resp);
 
-	printf("\n%i = %i \n", resp, resv);
-	return (1);
+	return 0;
 }
