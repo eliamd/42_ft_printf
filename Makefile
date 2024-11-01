@@ -1,108 +1,101 @@
 # **************************************************************************** #
-#                                  CONFIGURATION                               #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/09/06 09:51:37 by ajordan-          #+#    #+#              #
+#    Updated: 2024/11/01 14:01:02 by edetoh           ###   ########.fr        #
+#                                                                              #
 # **************************************************************************** #
 
-# Nom de l'exécutable (la librairie statique)
-NAME        := libftprintf.a
+# =============================== VARIABLES =================================== #
 
-# Compilateur et options de compilation
-CC          := cc
-CFLAGS      := -Wall -Wextra -Werror
+# Nom de la librairie finale
+NAME		= libftprintf.a
 
-# Commande pour créer l'archive de la librairie statique
-AR          := ar rcs
+# Répertoires
+INCLUDE		= include
+LIBFT		= libft
+SRC_DIR		= src/
+OBJ_DIR		= obj/
 
-# Commandes pour nettoyer
-RM          := rm -f
+# Commandes de compilation et d'archivage
+CC			= gcc
+CFLAGS		= -Wall -Werror -Wextra -I
+RM			= rm -f
+AR			= ar rcs
 
-# libft
-LIBFT_DIR   := libft
-LIBFT       := $(LIBFT_DIR)/libft.a
+# ================================ COULEURS =================================== #
 
-# **************************************************************************** #
-#                                 SOURCES                                      #
-# **************************************************************************** #
+# Codes couleurs pour le retour d'information dans le terminal
+DEF_COLOR = \033[0;39m
+GRAY = \033[0;90m
+RED = \033[0;91m
+GREEN = \033[0;92m
+YELLOW = \033[0;93m
+BLUE = \033[0;94m
+MAGENTA = \033[0;95m
+CYAN = \033[0;96m
+WHITE = \033[0;97m
 
-# Liste des fichiers sources (sans les bonus)
-SRCS        := ft_printf.c
+# =============================== SOURCES ===================================== #
 
-# Liste des fichiers sources pour les bonus
-SRCS_BONUS  :=
+# Liste des fichiers source pour ft_printf
+SRC_FILES	=	ft_printf
 
-# Transformation des fichiers sources en fichiers objets
-OBJS        := $(SRCS:.c=.o)
-OBJS_BONUS  := $(SRCS_BONUS:.c=.o)
+# Définition des fichiers source et objets
+SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 
-# **************************************************************************** #
-#                                 RÈGLES                                       #
-# **************************************************************************** #
+# Fichier de contrôle de l'existence du dossier obj
+OBJF		=	.cache_exists
 
-# Règle par défaut : compilation de la lib
-all: $(NAME)
+# ============================== REGLES PRINCIPALES ========================== #
 
-# Compilation de la librairie
-$(NAME): $(OBJS) $(LIBFT)
-	@echo " "
-	@echo ">>>>> Création de $(NAME) ... <<<<<"
-	@echo " "
-	$(AR) $(NAME) $(OBJS)
-	$(AR) $(NAME) $(LIBFT)
-	@echo " "
-	@echo ">>>>> $(NAME) créé avec succès. <<<<<"
-	@echo " "
+# Règle principale de compilation
+all:		$(NAME)
 
-# Compilation de libft
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+# Création de la librairie libftprintf.a
+$(NAME):	$(OBJ)
+			@echo "$(YELLOW)>>> Compilation de libft <<<$(DEF_COLOR)"
+			@make -C $(LIBFT)                           # Compilation de libft
+			@cp $(LIBFT)/libft.a .                      # Copie de libft.a dans le répertoire actuel
+			@mv libft.a $(NAME)                         # Renommage en libftprintf.a
+			@$(AR) $(NAME) $(OBJ)                       # Archivage des objets ft_printf dans libftprintf.a
+			@echo "$(GREEN)>>> libftprintf.a créé avec succès <<<$(DEF_COLOR)"
 
-# Compilation des fichiers bonus
-bonus: $(OBJS) $(OBJS_BONUS) $(LIBFT)
-	@echo " "
-	@echo ">>>>> Ajout des bonus à $(NAME)... <<<<<"
-	@echo " "
-	$(AR) $(NAME) $(OBJS) $(OBJS_BONUS)
-	$(AR) $(NAME) $(LIBFT)
-	@echo " "
-	@echo ">>>>> Bonus ajoutés avec succès. <<<<<"
-	@echo " "
+# Compilation des objets pour ft_printf
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
+			@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
+			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
-# Compilation des fichiers objets
-%.o: %.c
-	@echo ">>>>> Compilation de $< ... <<<<<"
-	$(CC) $(CFLAGS) -c $< -o $@ -I.
+# Création du répertoire obj si nécessaire
+$(OBJF):
+			@mkdir -p $(OBJ_DIR)
 
-# **************************************************************************** #
-#                                 NETTOYAGE                                    #
-# **************************************************************************** #
+# ================================== CLEAN ==================================== #
 
-# Suppression des fichiers objets
+# Nettoyage des objets de ft_printf et de libft
 clean:
-	@echo " "
-	@echo ">>>>> Nettoyage des fichiers objets... <<<<<"
-	@echo " "
-	$(RM) $(OBJS) $(OBJS_BONUS)
-	$(MAKE) -C $(LIBFT_DIR) clean
-	@echo " "
-	@echo ">>>>> Nettoyage terminé. <<<<<"
-	@echo " "
+			@$(RM) -rf $(OBJ_DIR)                       # Suppression des objets de ft_printf
+			@make clean -C $(LIBFT)                     # Nettoyage de libft
+			@echo "$(BLUE)>>> ft_printf object files cleaned! <<<$(DEF_COLOR)"
 
-# Suppression des fichiers objets et de la librairie
-fclean: clean
-	@echo " "
-	@echo ">>>>> Suppression de $(NAME)... <<<<<"
-	@echo " "
-	$(RM) $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
-	@echo " "
-	@echo ">>>>> Suppression terminée. <<<<<"
-	@echo " "
+# Nettoyage complet, incluant la suppression des librairies
+fclean:		clean
+			@$(RM) -f $(NAME)                           # Suppression de libftprintf.a
+			@$(RM) -f $(LIBFT)/libft.a                  # Suppression de libft.a de libft
+			@echo "$(CYAN)>>> ft_printf et libft executables cleaned! <<<$(DEF_COLOR)"
 
-# Recompile tout depuis le début
-re: fclean all
+# ================================= REBUILD =================================== #
 
-# **************************************************************************** #
-#                                 UTILITAIRES                                  #
-# **************************************************************************** #
+# Recompilation complète
+re:			fclean all
+			@echo "$(GREEN)>>> Cleaned and rebuilt everything for ft_printf! <<<$(DEF_COLOR)"
 
-# Indique que ces règles ne correspondent pas à des fichiers
-.PHONY: all clean fclean re bonus
+# ================================ PHONY ====================================== #
+
+# Indication des règles qui ne correspondent pas à des fichiers
+.PHONY:		all clean fclean re

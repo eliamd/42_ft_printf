@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:45:00 by edetoh            #+#    #+#             */
-/*   Updated: 2024/10/28 18:41:05 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/01 13:22:25 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,4 @@ int	ft_printf(const char *str, ...)
 	}
 	va_end(ap);
 	return (count);
-}
-
-int main(void)
-{
-	int resv;
-	int resp;
-	int *pointeur = &resv;
-
-	resv = ft_printf("=== MON PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\nDecimal : %d\nInteger : %i\nUnsigned decimal : %u\nHexadecimal (lowercase) : %x\nHexadecimal (uppercase) : %X\nPercent sign : %%\n",
-					 'Z', "Bonjour", (void *)pointeur, 123, 21, 233323323, 166, 166);
-	resp =    printf("=== VRA PRINTF ===\nchar : %c\nString : %s\nPointeur : %p\nDecimal : %d\nInteger : %i\nUnsigned decimal : %u\nHexadecimal (lowercase) : %x\nHexadecimal (uppercase) : %X\nPercent sign : %%\n",
-					 'Z', "Bonjour", (void *)pointeur, 123, 21, 233323323, 166, 166);
-
-	printf("=== Résultats ===\nMon printf a imprimé %d caractères\nVrai printf a imprimé %d caractères\n", resv, resp);
-
-	return 0;
 }
