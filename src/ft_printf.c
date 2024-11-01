@@ -6,11 +6,11 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:45:00 by edetoh            #+#    #+#             */
-/*   Updated: 2024/11/01 14:08:33 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/01 16:40:49 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "../include/libftprintf.h"
 
 static int	print_format(char format, va_list *ap)
 {
@@ -24,9 +24,9 @@ static int	print_format(char format, va_list *ap)
 	else if (format == 'p')
 		count += ft_putadress(va_arg(*ap, char *));
 	else if (format == 'd' || format == 'i')
-		count += ft_putstr_fd(ft_itoa(va_arg(*ap, int)), 1);
+		count += ft_putnbr_fd(va_arg(*ap, int), 1);
 	else if (format == 'u')
-		count += ft_putstr_fd(ft_unsigned_itoa(va_arg(*ap, unsigned int)), 1);
+		count += ft_put_unsigned_nbr_fd(va_arg(*ap, int), 1);
 	else if (format == 'x')
 		count += ft_puthexlow(va_arg(*ap, unsigned int));
 	else if (format == 'X')
@@ -57,7 +57,11 @@ int	ft_printf(const char *str, ...)
 			}
 		}
 		else
-			count += write(1, str, 1);
+		{
+			if (write(1, str, 1) < 1)
+				return (-1);
+			count ++;
+		}
 		str++;
 	}
 	va_end(ap);

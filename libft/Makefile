@@ -69,6 +69,7 @@ SRCS        := ft_isdigit.c \
                ft_put_nb_hex_low.c \
                ft_put_nb_hex_up.c \
                ft_unsigned_itoa.c \
+               ft_put_unsigned_nbr_fd.c \
 
 # Transformation des fichiers sources en fichiers objets
 OBJS        := $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:51:10 by edetoh            #+#    #+#             */
-/*   Updated: 2024/10/25 11:15:57 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/01 15:54:24 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,32 @@ Takes 'n' (number to write) and 'fd' (file descriptor).
 Uses write() to write the number to the file.
 */
 
-void	ft_putnbr_fd(int n, int fd)
+int	ft_putnbr_fd(int n, int fd)
 {
-	char	numchar;
+	int		count;
 
+	count = 0;
 	if (n == -2147483648)
 	{
 		write(fd, "-2147483648", 11);
-		return ;
+		return (11);
 	}
 	if (n < 0)
 	{
 		write(fd, "-", 1);
 		n = -n;
+		count++;
 	}
 	if (n >= 10)
 	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10, fd);
+		count += ft_putnbr_fd(n / 10, fd) + ft_putnbr_fd(n % 10, fd);
 	}
 	else
 	{
-		numchar = n + '0';
-		write(fd, &numchar, 1);
+		write(fd, &(char){n + '0'}, 1);
+		count++;
 	}
+	return (count);
 }
 // #include  <string.h>
 // #include  <stdio.h>

@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 11:13:45 by edetoh            #+#    #+#             */
-/*   Updated: 2024/10/28 18:06:13 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/01 16:16:15 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stddef.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 
 int				ft_atoi(const char *nptr);
 size_t			ft_strlen(const char *s);
@@ -51,7 +52,7 @@ void			ft_striteri(char *s, void (*f)(unsigned int, char*));
 int				ft_putchar_fd(char c, int fd);
 int				ft_putstr_fd(char *s, int fd);
 void			ft_putendl_fd(char *s, int fd);
-void			ft_putnbr_fd(int n, int fd);
+int				ft_putnbr_fd(int n, int fd);
 
 // >>>>>>> BONUS <<<<<<<
 typedef struct s_list
@@ -77,5 +78,6 @@ char			*ft_unsigned_itoa(unsigned int n);
 int				ft_putadress(void *ptr);
 int				ft_puthexlow(unsigned int num);
 int				ft_puthexup(unsigned int num);
+int				ft_put_unsigned_nbr_fd(unsigned int n, int fd);
 
 #endif
