@@ -6,7 +6,7 @@
 #    By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/01 14:02:05 by edetoh            #+#    #+#              #
-#    Updated: 2024/11/01 14:08:36 by edetoh           ###   ########.fr        #
+#    Updated: 2024/11/01 14:16:23 by edetoh           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 
 # Commandes de compilation et d'archivage
-CC			= gcc
+CC			= cc
 CFLAGS		= -Wall -Werror -Wextra -I
 RM			= rm -f
 AR			= ar rcs
