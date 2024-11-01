@@ -6,7 +6,7 @@
 #    By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/01 14:02:05 by edetoh            #+#    #+#              #
-#    Updated: 2024/11/01 17:56:16 by edetoh           ###   ########.fr        #
+#    Updated: 2024/11/01 17:57:35 by edetoh           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ all:		$(NAME)
 # Création de la librairie libftprintf.a
 $(NAME):	$(OBJ)
 			@echo "$(YELLOW)>>> Compilation de libft <<<$(DEF_COLOR)"
-			@make -C $(LIBFT)                           # Compilation de libft
+			@make -C $(LIBFT)                           # Compilation de libft.
 			@cp $(LIBFT)/libft.a .                      # Copie de libft.a dans le répertoire actuel
 			@mv libft.a $(NAME)                         # Renommage en libftprintf.a
 			@$(AR) $(NAME) $(OBJ)                       # Archivage des objets ft_printf dans libftprintf.a
