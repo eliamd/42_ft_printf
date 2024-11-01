@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 18:01:43 by edetoh            #+#    #+#             */
-/*   Updated: 2024/11/01 14:08:28 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/01 14:13:53 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int	ft_putadress(void *ptr)
 {
-	intprt_t		addr;
+	intptr_t		addr;
 	char			*hex_digits;
 	char			address[16];
 	int				i;
 	int				start;
 
 	hex_digits = "0123456789abcdef";
-	addr = (intprt_t)ptr;
+	addr = (intptr_t)ptr;
 	i = 15;
 	while (i >= 0)
 	{
