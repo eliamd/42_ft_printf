@@ -6,23 +6,19 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 18:01:43 by edetoh            #+#    #+#             */
-/*   Updated: 2024/11/04 13:58:27 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/04 17:28:08 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_putadress(void *ptr)
+static void	convert_to_hex(uintptr_t addr, char *address)
 {
-	uintptr_t		addr;
-	char			*hex_digits;
-	char			address[17];
-	int				i;
-	int				start;
+	char	*hex_digits;
+	int		i;
 
-	hex_digits = "0123456789abcdef";
-	addr = (uintptr_t)ptr;
 	i = 15;
+	hex_digits = "0123456789abcdef";
 	address[16] = '\0';
 	while (i >= 0)
 	{
@@ -30,6 +26,18 @@ int	ft_putadress(void *ptr)
 		addr /= 16;
 		i--;
 	}
+}
+
+int	ft_putadress(void *ptr)
+{
+	uintptr_t	addr;
+	char		address[17];
+	int			start;
+
+	if (ptr == NULL)
+		return (write(1, "(nil)", 5));
+	addr = (uintptr_t)ptr;
+	convert_to_hex(addr, address);
 	if (write(1, "0x", 2) < 1)
 		return (-1);
 	start = 0;

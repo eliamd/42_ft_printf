@@ -6,7 +6,7 @@
 #    By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/01 14:02:05 by edetoh            #+#    #+#              #
-#    Updated: 2024/11/04 14:52:14 by edetoh           ###   ########.fr        #
+#    Updated: 2024/11/04 17:41:51 by edetoh           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,30 +57,30 @@ all:		$(NAME)
 # Création de la librairie libftprintf.a
 $(NAME):	$(OBJ)
 			@echo "$(YELLOW)>>> Compilation de libft <<<$(DEF_COLOR)"
-			@make -C $(LIBFT)
-			@cp $(LIBFT)/libft.a .
-			@mv libft.a $(NAME)
-			@$(AR) $(NAME) $(OBJ)
+			make -C $(LIBFT)
+			cp $(LIBFT)/libft.a .
+			mv libft.a $(NAME)
+			$(AR) $(NAME) $(OBJ)
 			@echo "$(GREEN)>>> libftprintf.a créé avec succès <<<$(DEF_COLOR)"
 
 # Compilation des objets pour ft_printf
 $(SRC_DIR)%.o: $(SRC_DIR)%.c
 			@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
-			@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+			$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 
 # ================================== CLEAN ==================================== #
 
 # Nettoyage des objets de ft_printf et de libft
 clean:
-			@$(RM) -rf $(OBJ_DIR)
-			@make clean -C $(LIBFT)
+			$(RM) -rf $(SRC_DIR)*.o
+			make clean -C $(LIBFT)
 			@echo "$(BLUE)>>> ft_printf object files cleaned! <<<$(DEF_COLOR)"
 
 # Nettoyage complet, incluant la suppression des librairies
 fclean:		clean
-			@$(RM) -f $(NAME)
-			@$(RM) -f $(LIBFT)/libft.a
+			$(RM) -f $(NAME)
+			$(RM) -f $(LIBFT)/libft.a
 			@echo "$(CYAN)>>> ft_printf et libft executables cleaned! <<<$(DEF_COLOR)"
 
 # ================================= REBUILD =================================== #
