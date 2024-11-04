@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 18:01:43 by edetoh            #+#    #+#             */
-/*   Updated: 2024/11/01 16:12:13 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/04 13:58:27 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	ft_putadress(void *ptr)
 		addr /= 16;
 		i--;
 	}
-	write(1, "0x", 2);
+	if (write(1, "0x", 2) < 1)
+		return (-1);
 	start = 0;
 	while (start < 16 && address[start] == '0')
 		start++;

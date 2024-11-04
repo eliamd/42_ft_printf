@@ -6,7 +6,7 @@
 /*   By: edetoh <edetoh@student.42lehavre.fr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 16:34:23 by edetoh            #+#    #+#             */
-/*   Updated: 2024/11/01 15:11:35 by edetoh           ###   ########.fr       */
+/*   Updated: 2024/11/04 13:53:53 by edetoh           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ int	ft_putstr_fd(char *s, int fd)
 	if (s)
 	{
 		str_len = ft_strlen(s);
-		write(fd, s, str_len);
-		return (str_len);
+		return (write(fd, s, str_len));
 	}
 	write(fd, "(null)", 6);
 	return (6);
